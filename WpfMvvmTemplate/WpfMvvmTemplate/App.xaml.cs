@@ -1,17 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-
-namespace WpfMvvmTemplate
+﻿namespace WpfMvvmTemplate
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    using System;
+    using System.Reflection;
+    using System.Windows;
+    using Core.Logger;
+    using IoC;
+
+    public partial class App
     {
+        public static Version CurrentVersion;
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            IocKernel.Initialize(new IocConfiguration());
+            LogVersions();
+            base.OnStartup(e);
+        }
+
+        private static void LogVersions()
+        {
+            CurrentVersion = Assembly.GetEntryAssembly().GetName().Version;
+            Constants.Loggers.Info(CurrentVersion);
+        }
     }
 }
